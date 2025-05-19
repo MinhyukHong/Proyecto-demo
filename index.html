@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Enfoca y Gana</title>
+    <style>
+      /* KHU Library Inspired Theme */
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+          url("https://lib.khu.ac.kr/image/ko/local/slide_01.jpg") center/cover
+            no-repeat;
+        color: #fff;
+        overflow: hidden;
+      }
+      .container {
+        max-width: 400px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        position: relative;
+      }
+      img.logo,
+      img.library-logo {
+        display: block;
+        margin: 0 auto;
+      }
+      img.logo {
+        width: 60px;
+        margin-bottom: 12px;
+      }
+      img.library-logo {
+        height: 36px;
+        margin-bottom: 24px;
+      }
+      h1 {
+        font-size: 2.4rem;
+        margin: 12px 0 24px;
+        letter-spacing: 1px;
+      }
+      h2 {
+        font-size: 1.8rem;
+        margin: 16px 0;
+        letter-spacing: 1px;
+      }
+      p.subtitle {
+        font-size: 1rem;
+        margin: 12px 0 24px;
+      }
+      p.tokens,
+      p.coupons {
+        font-size: 1rem;
+        margin: 8px 0;
+      }
+      input,
+      select {
+        width: 90%;
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.85);
+        color: #004890;
+      }
+      button {
+        background: #004890;
+        color: #fff;
+        border: none;
+        padding: 14px 32px;
+        font-size: 1rem;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        margin: 16px auto;
+        display: block;
+        transition: background 0.3s;
+      }
+      button:hover {
+        background: #003366;
+      }
+      button.small {
+        background: #fff;
+        color: #004890;
+        padding: 8px 20px;
+        font-size: 0.9rem;
+        border-radius: 20px;
+        margin: 16px auto;
+        display: block;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      button.small:hover {
+        background: #eee;
+      }
+      .hidden {
+        display: none;
+      }
+      #focus {
+        font-size: 3rem;
+        margin: 20px 0;
+      }
+      .coupon-card {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 20px;
+        border: 2px dashed #fff;
+        border-radius: 12px;
+        display: inline-block;
+        width: 260px;
+        margin: 16px 0;
+      }
+      .coupon-card img {
+        width: 100px;
+        height: 100px;
+        margin: 12px auto;
+      }
+      .coupon-card h3 {
+        margin: 8px 0;
+        font-size: 1.3rem;
+      }
+      footer {
+        position: absolute;
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.9rem;
+      }
+      /* Greeting Overlay */
+      #greeting-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 1s ease, visibility 1s;
+      }
+      #greeting-screen.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      #greeting-screen h1 {
+        font-size: 2.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Greeting Overlay -->
+    <div id="greeting-screen">
+      <h1 id="greeting-text">¡Hola!</h1>
+    </div>
+    <div class="container">
+      <!-- Login Screen -->
+      <div id="login-screen">
+        <img
+          class="logo"
+          src="https://i.namu.wiki/i/8XBHWh_28LLWn4rt4mSoLoizAGuYU9Uk2i3B6F2mBg3YZJ9LFk0hu8J2s28MMdhVjRIUThQsN7xBD8c2lYGhypDohU-dyUR9dkOhllYx4QrLsXoewRUu8oJD6U-gtLym_oJ9ZcU2dkQ341HTYsHaBQ.svg"
+          alt="교휘장"
+        />
+        <h2>Kyunghee University</h2>
+        <h3>Datos de estudiante</h3>
+        <input id="college" placeholder="Facultad" />
+        <input id="dept" placeholder="Departamento" />
+        <input id="studentId" placeholder="Número de estudiante" />
+        <input id="name" placeholder="Nombre" />
+        <button id="loginBtn">Ingresar</button>
+      </div>
+
+      <!-- Start Screen -->
+      <div id="start-screen" class="hidden">
+        <img
+          class="library-logo"
+          src="https://lib.khu.ac.kr/image/ko/local/logo.png"
+          alt="경희대학교 중앙도서관"
+        />
+        <button id="walletBtn" class="small">Mis Cupones</button>
+        <p class="subtitle"><b>경희대학교 중앙도서관 ✕ ☕ Café KHUFEE</b></p>
+        <h1><i>Enfoca y Gana</i></h1>
+        <button id="startBtn">⏱️ Enfocamos</button>
+        <p class="tokens">
+          Tokens acumulados: <span id="tokenCount">0</span>/3
+        </p>
+        <p class="coupons">
+          Cupones guardados: <span id="couponCountFoot">0</span>
+        </p>
+      </div>
+
+      <!-- Focus Screen -->
+      <div id="focus-screen" class="hidden">
+        <h2>⏳ Modo de concentración</h2>
+        <div id="focus">10s</div>
+        <p class="tokens">Tokens: <span id="tokenCount2">0</span>/3</p>
+      </div>
+
+      <!-- Reward Screen -->
+      <div id="reward-screen" class="hidden">
+        <h2>🎉 ¡Token conseguido!</h2>
+        <button id="continueBtn">Continuar</button>
+        <p class="tokens">Tokens: <span id="tokenCount3">0</span>/3</p>
+      </div>
+
+      <!-- Coupon Screen -->
+      <div id="coupon-screen" class="hidden">
+        <div class="coupon-card">
+          <h3>☕ Cupón KHUFEE</h3>
+          <p>Descuento: 30%</p>
+          <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=KHUFEE-COUPON"
+            alt="QR"
+          />
+          <p><small>Guardado en wallet</small></p>
+        </div>
+        <button id="backStartBtn">Volver al inicio</button>
+      </div>
+
+      <!-- Wallet Screen -->
+      <div id="wallet-screen" class="hidden">
+        <h2>💳 Mis Cupones</h2>
+        <div id="couponList"></div>
+        <p id="noCouponMsg">No hay cupones guardados.</p>
+        <button id="backBtn">Volver</button>
+      </div>
+    </div>
+
+    <script>
+      const DEMO = 10;
+      let tokens = 0;
+      let couponCount = 0;
+
+      // Reset stored data
+      localStorage.removeItem("couponCount");
+      localStorage.removeItem("tokens");
+
+      // Elements
+      const loginScr = document.getElementById("login-screen");
+      const startScr = document.getElementById("start-screen");
+      const focusScr = document.getElementById("focus-screen");
+      const rewardScr = document.getElementById("reward-screen");
+      const couponScr = document.getElementById("coupon-screen");
+      const walletScr = document.getElementById("wallet-screen");
+      const greetingScr = document.getElementById("greeting-screen");
+      const greetingText = document.getElementById("greeting-text");
+      const walletBtn = document.getElementById("walletBtn");
+      const startBtn = document.getElementById("startBtn");
+      const continueBtn = document.getElementById("continueBtn");
+      const backBtn = document.getElementById("backBtn");
+      const backStartBtn = document.getElementById("backStartBtn");
+      const loginBtn = document.getElementById("loginBtn");
+      const focusTimer = document.getElementById("focus");
+      const tokenEls = [
+        document.getElementById("tokenCount"),
+        document.getElementById("tokenCount2"),
+        document.getElementById("tokenCount3"),
+      ];
+      const couponCountFoot = document.getElementById("couponCountFoot");
+      const couponList = document.getElementById("couponList");
+      const noCouponMsg = document.getElementById("noCouponMsg");
+
+      function show(el) {
+        [loginScr, startScr, focusScr, rewardScr, couponScr, walletScr].forEach(
+          (v) => v.classList.add("hidden")
+        );
+        el.classList.remove("hidden");
+      }
+      function updateTokens() {
+        tokenEls.forEach((e) => (e.textContent = tokens));
+      }
+      function updateCouponCount() {
+        couponCountFoot.textContent = couponCount;
+      }
+
+      // Initial state: show login
+      show(loginScr);
+
+      // Login handler
+      loginBtn.onclick = () => {
+        const name = document.getElementById("name").value.trim();
+        if (!name) {
+          alert("Ingrese todos datos, por favor.");
+          return;
+        }
+        // Set greeting text and show overlay
+        greetingText.textContent = `¡Hola, ${name}!`;
+        greetingScr.classList.add("show");
+        // After delay, hide overlay and show main
+        setTimeout(() => {
+          greetingScr.classList.remove("show");
+          show(startScr);
+        }, 1500);
+      };
+
+      // Focus flow
+      startBtn.onclick = () => {
+        updateTokens();
+        show(focusScr);
+        let sec = DEMO;
+        focusTimer.textContent = sec + "s";
+        const interval = setInterval(() => {
+          sec--;
+          focusTimer.textContent = sec + "s";
+          if (sec <= 0) {
+            clearInterval(interval);
+            show(rewardScr);
+          }
+        }, 1000);
+      };
+      continueBtn.onclick = () => {
+        tokens++;
+        updateTokens();
+        if (tokens >= 3) {
+          tokens = 0;
+          couponCount++;
+          updateTokens();
+          updateCouponCount();
+          renderWallet();
+          show(couponScr);
+        } else show(startScr);
+      };
+      backStartBtn.onclick = () => show(startScr);
+      walletBtn.onclick = () => {
+        renderWallet();
+        show(walletScr);
+      };
+      backBtn.onclick = () => show(startScr);
+
+      function renderWallet() {
+        couponList.innerHTML = "";
+        if (couponCount === 0) {
+          noCouponMsg.classList.remove("hidden");
+          return;
+        }
+        noCouponMsg.classList.add("hidden");
+        for (let i = 0; i < couponCount; i++) {
+          const div = document.createElement("div");
+          div.className = "coupon-card";
+          div.innerHTML = `<h3>☕ Cupón KHUFEE</h3><img src='https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=KHUFEE-COUPON-${
+            i + 1
+          }' alt='QR'><p><small>#${i + 1}</small></p>`;
+          couponList.appendChild(div);
+        }
+      }
+
+      updateTokens();
+      updateCouponCount();
+    </script>
+  </body>
+</html>
